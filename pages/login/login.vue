@@ -1,5 +1,6 @@
 <template>
 	<view class="page">
+		<image class="logo" src="@/static/logo.png" mode=""></image>
 		<uni-forms ref="form" :modelValue="formData" class="form" :rules="rules">
 			<uni-forms-item name="account" label="账号">
 				<!-- uni-easyinput 的校验时机是数据发生变化， 即触发 input 时 -->
@@ -9,8 +10,10 @@
 				<!-- input 的校验时机是触发 binddata 时， 即触发 blur 时 -->
 				<uni-easyinput v-model="formData.password" type="password" placeholder="请输入密码" />
 			</uni-forms-item>
-			<button class="button" @click="submit">确认</button>
+			<button type="primary" class="button" @click="submit">登录</button>
 		</uni-forms>
+		<!-- <image @click="quickLogin" class="wechat" src="@/static/logo.png" mode=""></image> -->
+		<!-- <text class="txt">微信登录</text> -->
 	</view>
 </template>
 <script>
@@ -57,44 +60,93 @@
 			}
 		},
 		onShow() {
-			console.log(3)
-			console.log(globalData)
-			console.log(this.$api)
 		},
 		mounted() {
-			console.log(1)
-			// console.log(globalData)
 		},
 		methods: {
 			submit() {
 				this.$refs.form.validate().then(res => {
 					console.log('success', res);
-					this.$api.adminAuthLogin({
-						account: this.formData.account,
-						password: this.formData.password
-					}).then(res => {
-						console.log(res)
-						uni.setStorage({
-							key: 'userInfo',
-							data: res
-						})
-						uni.setStorage({
-							key: 'toekn',
-							data: res.token
-						})
+
+					uni.getUserInfo({
+						success: res => {
+							console.log(res)
+							this.userInfo = res.userInfo
+							uni.setStorage({
+								key: 'isLogin',
+								data: true
+							})
+
+							this.$api.adminAuthLogin({
+								account: this.formData.account,
+								password: this.formData.password
+							}).then(res => {
+								console.log(res)
+								uni.setStorage({
+									key: 'userInfo',
+									data: res.data
+								})
+								uni.setStorage({
+									key: 'ss',
+									data: res.data.ss
+								})
+								uni.setStorage({
+									key: 'token',
+									data: res.data.token
+								})
+								uni.navigateBack()
+							})
+						}
 					})
+
+
 				}).catch(err => {
 					console.log('err', err);
 				})
 			},
+			quickLogin() {
+				uni.getUserInfo({
+					success: res => {
+						console.log(res)
+						this.userInfo = res.userInfo
+						uni.setStorage({
+							key: 'isLogin',
+							data: true
+						})
+
+					}
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.page {
-		padding: 300rpx 30rpx;
+		padding: 200rpx 30rpx 0;
+		height: 100vh;
+		overflow: hidden;
 
-		.form {}
+		.logo {
+			width: 130rpx;
+			height: 130rpx;
+			margin: 0 auto 60rpx;
+			display: block;
+		}
+
+		.wechat {
+			width: 110rpx;
+			height: 110rpx;
+			margin: 60rpx auto 0;
+			display: block;
+			border-radius: 50%;
+		}
+
+		.txt {
+			font-size: 24rpx;
+			display: block;
+			text-align: center;
+			margin-top: 20rpx;
+		}
 	}
 </style>

@@ -103,7 +103,7 @@
 						text: '网点管理',
 						bg: require('@/static/image/manage/manage1.png'),
 						appID: '',
-						defaultPage: ''
+						defaultPage: '/pages/index/branch'
 					},
 					{
 						text: '员工管理',
@@ -121,7 +121,7 @@
 						text: '前台电话',
 						bg: require('@/static/image/manage/manage4.png'),
 						appID: '',
-						defaultPage: ''
+						defaultPage: '/uselessPages/pages/complaintPhone'
 					},
 					{
 						text: '公告设置',
@@ -176,24 +176,8 @@
 				})
 			},
 			goTo(item) {
-				// if (to == 'meituan') {
-				// 	uni.navigateToMiniProgram({
-				// 		appId: 'wx2c348cf579062e56',
-				// 		path: 'packages/restaurant/restaurant/restaurant?poi_id=1027434691792581&aas=1003&cat_id=0',
-				// 		extraDta: {
-				// 			'data1': 'test'
-				// 		},
-				// 		success(res) {
-				// 			console.log('tiao')
-				// 		}
-				// 	})
-				// }
-				uni.navigateToMiniProgram({
-					appId: item.appID,
-					path: item.defaultPage,
-					success(res) {
-						console.log('tiao')
-					}
+				uni.navigateTo({
+					url: item.defaultPage
 				})
 
 			}

@@ -89,6 +89,20 @@
 		"root": "uselessPages",
 		"pages": [
 			{
+				"path": "pages/branchDetail",
+				"style": {
+					"navigationBarTitleText": "编辑网点",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "pages/complaintPhone",
+				"style": {
+					"navigationBarTitleText": "前台电话",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
 				"path": "pages/withdrawal",
 				"style": {
 					"navigationBarTitleText": "预约发票",

@@ -10,7 +10,7 @@
 				style="width: 100% ;" @click="getUserInfo">
 				未登录
 			</button> -->
-			<text @click="getUserInfo()">{{userInfo.nickName || '去登录'}}</text>
+			<text @click="getUserInfo()">{{userInfo.realName || '去登录'}}</text>
 		</view>
 		<view class="orders">
 			<view class="order" v-for="(item, index) in orders" :key="index" @click="goTo(item)">
@@ -69,18 +69,24 @@
 		onLoad() {
 			console.log(baseURL)
 		},
+		onShow() {
+			this.userInfo = uni.getStorageSync('userInfo')
+		},
 		methods: {
 			getUserInfo() {
-				uni.getUserInfo({
-					success: res => {
-						console.log(res)
-						this.userInfo = res.userInfo
-						uni.setStorage({
-							key: 'isLogin',
-							data: true
-						})
-					}
+				uni.navigateTo({
+					url: '/pages/login/login'
 				})
+				// uni.getUserInfo({
+				// 	success: res => {
+				// 		console.log(res)
+				// 		this.userInfo = res.userInfo
+				// 		uni.setStorage({
+				// 			key: 'isLogin',
+				// 			data: true
+				// 		})
+				// 	}
+				// })
 			},
 			goTo(item) {
 				console.log(item)

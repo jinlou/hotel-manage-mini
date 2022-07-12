@@ -14,7 +14,7 @@ const httpRequest = (opts, data) => {
 		header: opts.method == 'get' ? {
 			'X-Requested-With': 'XMLHttpRequest',
 			"Accept": "application/json",
-			"Content-Type": "application/json; charset=UTF-8"
+			"Content-Type": "application/json; charset=UTF-8",
 		} : {
 			'X-Requested-With': 'XMLHttpRequest',
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -52,6 +52,9 @@ const httpTokenRequest = (opts, data) => {
 		opts.url = opts.url + '/' + opts.query
 	}
 	let token = uni.getStorageSync('token')
+	let ss = uni.getStorageSync('ss')
+	console.log(token)
+	console.log(ss)
 
 	if (token) {
 		let httpDefaultOpts = {
@@ -62,18 +65,24 @@ const httpTokenRequest = (opts, data) => {
 				'Cookie': token,
 				'X-Requested-With': 'XMLHttpRequest',
 				"Accept": "application/json",
-				"Content-Type": "application/json; charset=UTF-8"
+				"Content-Type": "application/json; charset=UTF-8",
+				'ss': ss,
+				'Authorization': 'Bearer ' + token 
 			} : {
 				'Cookie': token,
 				'X-Requested-With': 'XMLHttpRequest',
-				'Content-Type': opts.payload ? 'application/json; charset=UTF-8' : 'application/x-www-form-urlencoded; charset=UTF-8'
+				'Content-Type': opts.payload ? 'application/json; charset=UTF-8' : 'application/x-www-form-urlencoded; charset=UTF-8',
+				'ss': ss,
+				'Authorization': 'Bearer ' + token 
 			},
 			dataType: 'json',
 		}
 		let promise = new Promise(function(resolve, reject) {
 			uni.request(httpDefaultOpts).then(
 				(res) => {
-					if (res[1].header.hasOwnProperty('expired') && res[1].header['expired'] === 'true') {
+					console.log('=============')
+					console.log(res)
+					if (res[1].data && res[1].data.code == '4003') {
 						uni.navigateTo({
 							url: '/pages/login/login'
 						})
